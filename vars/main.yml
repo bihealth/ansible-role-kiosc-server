@@ -1,0 +1,38 @@
+---
+
+# bihealth.sodar_core_app -------------------------------------------------------------------------
+
+sodar_core_app_name: kiosc
+sodar_core_app_docker_enabled: true
+sodar_core_app_git_repo: "{{ kiosc_git_repo }}"
+sodar_core_app_email_prefix: "{{ kiosc_email_prefix }}"
+sodar_core_app_webserver: daphne
+sodar_core_app_celery_enabled: true
+sodar_core_app_celery_workers_default: "{{ kiosc_celery_workers }}"
+
+# bihealth.nginx ----------------------------------------------------------------------------------
+
+nginx_pre_location_snippet: |
+  # Pass down web sockets with appropriate headers.
+  # TODO: currently fixed to start with "websocket"/...
+  location ~ "^/dockerapps/(.+)/proxy/(.+)/websocket/(.*)$" {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+      proxy_set_header X-Forwarded-Proto $scheme;
+
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "Upgrade";
+
+      proxy_read_timeout 2h;
+      proxy_connect_timeout 20s;
+      proxy_send_timeout 20s;
+
+      proxy_pass http://{{ nginx_reverse_proxy_host }}:{{ nginx_reverse_proxy_port }}/dockerapps/$1/proxy/$2/$3;
+  }
+
+# bihealth.python3 --------------------------------------------------------------------------------
+
+python3_versions:
+  - 3.6

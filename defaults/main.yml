@@ -1,0 +1,12 @@
+---
+
+# Also see the defaults of bihealth.sodar_core_app.
+
+# Git repository to get app from.
+kiosc_git_repo: "https://github.com/bihealth/kiosc.git"
+
+# Tag to use for email prefix.
+kiosc_email_prefix: "[KIOSC]"
+
+# Number of celery workers to spawn for default queue.
+kiosc_celery_workers: 8
