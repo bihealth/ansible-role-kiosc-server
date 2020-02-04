@@ -8,7 +8,20 @@ sodar_core_app_git_repo: "{{ kiosc_git_repo }}"
 sodar_core_app_email_prefix: "{{ kiosc_email_prefix }}"
 sodar_core_app_webserver: daphne
 sodar_core_app_celery_enabled: true
-sodar_core_app_celery_workers_default: "{{ kiosc_celery_workers }}"
+sodar_core_app_celery_workers_default: "{{ kiosc_celery_workers_default }}"
+
+sodar_core_app_celeryd_workers:
+  - name: default
+    queues:
+      - default
+    concurrency: "{{ kiosc_celery_workers_default }}"
+
+
+sodar_core_app_systemd_env_snippet: |
+  {% if kiosc_enable_sentry %}
+  ENABLE_SENTRY={{ 1 if kiosc_enable_sentry else 0 }}
+  SENTRY_DSN="{{ kiosc_sentry_dsn }}"
+  {% endif %}
 
 # bihealth.nginx ----------------------------------------------------------------------------------
 

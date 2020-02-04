@@ -8,5 +8,4 @@ kiosc_git_repo: "https://github.com/bihealth/kiosc.git"
 # Tag to use for email prefix.
 kiosc_email_prefix: "[KIOSC]"
 
-# Number of celery workers to spawn for default queue.
-kiosc_celery_workers: 8
+kiosc_celery_workers_default: 8
